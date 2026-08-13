@@ -4,10 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MoMS.Server.Services;
 
-// Shared base for all domain services. Holds the scoped DbContext (used for
-// EF-based reads/writes) and exposes a parameterized raw-SQL helper for the
-// high-frequency / cross-database queries that bypass the ORM. Every raw call
-// must pass values as SqlParameter — never interpolate into the command text.
 public abstract class BaseService(MoMsDbContext context)
 {
     protected MoMsDbContext Context { get; } = context;
@@ -53,4 +49,19 @@ public abstract class BaseService(MoMsDbContext context)
 
         return results;
     }
+
+    protected static double? ToDoubleN(object value) =>
+        value is DBNull or null ? null : Convert.ToDouble(value);
+
+    protected static int? ToIntN(object value) =>
+        value is DBNull or null ? null : Convert.ToInt32(value);
+
+    protected static bool? ToBoolN(object value) =>
+        value is DBNull or null ? null : Convert.ToBoolean(value);
+
+    protected static DateTime? ToDateTimeN(object value) =>
+        value is DBNull or null ? null : Convert.ToDateTime(value);
+
+    protected static string? ToStringN(object value) =>
+        value is DBNull or null ? null : value.ToString();
 }

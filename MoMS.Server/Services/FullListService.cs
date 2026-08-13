@@ -6,8 +6,6 @@ namespace MoMS.Server.Services;
 
 public class FullListService(MoMsDbContext context) : BaseService(context)
 {
-    // GET /api/full-list — mirrors "SELECT ... FROM full_list WHERE S_NUM IS NOT NULL"
-    // but projects only the columns the client needs rather than SELECT *.
     public async Task<List<FullList>> GetAllAsync(CancellationToken cancellationToken)
     {
         return await Context.FullList

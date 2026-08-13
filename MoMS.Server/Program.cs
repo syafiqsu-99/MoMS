@@ -5,35 +5,41 @@ using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Connection string comes from ConnectionStrings__MoMsConnection (or
-// __DefaultConnection) machine-level env vars — never from appsettings.json.
-var connectionString =
-    builder.Configuration.GetConnectionString("MoMsConnection")
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("MomsConnection");
+var defaultConnectionConfigured = !string.IsNullOrWhiteSpace(connectionString);
 
-if (string.IsNullOrWhiteSpace(connectionString))
-{
-    throw new InvalidOperationException(
-        "No connection string configured. Set the ConnectionStrings__MoMsConnection " +
-        "or ConnectionStrings__DefaultConnection environment variable.");
-}
+if (!defaultConnectionConfigured)
+    connectionString = "Server=(unconfigured);Database=(unconfigured);Trusted_Connection=True;TrustServerCertificate=True";
 
 builder.Services.AddDbContext<MoMsDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Domain services (Scoped — request-bound, share the scoped DbContext).
 builder.Services.AddScoped<FullListService>();
+builder.Services.AddScoped<FullListRepeatService>();
+builder.Services.AddScoped<ListHistoryService>();
+builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<TimelineService>();
+builder.Services.AddScoped<PreparationService>();
+builder.Services.AddScoped<ImageStorageService>();
+builder.Services.AddScoped<DocketService>();
+builder.Services.AddScoped<ListFileService>();
 
-// Additive schema initialization at startup.
 builder.Services.AddHostedService<SchemaInitializerService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Required by QuestPDF (Community licence) before any document is generated.
+builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
 QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();
+
+var staticRoot = Path.Combine(app.Environment.WebRootPath, "static");
+Directory.CreateDirectory(Path.Combine(staticRoot, "toolset_img"));
+Directory.CreateDirectory(Path.Combine(staticRoot, "docket_pdf"));
 
 if (app.Environment.IsDevelopment())
 {
@@ -43,9 +49,10 @@ if (app.Environment.IsDevelopment())
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+app.UseCors();
+
 app.MapControllers();
 
-// Falls through to the SPA for any non-API route.
 app.MapFallbackToFile("/index.html");
 
 app.Run();
