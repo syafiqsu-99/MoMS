@@ -51,10 +51,18 @@ public record DeleteImagesDto(
     string Status,
     string ImgName);
 
-// save-file: overwrites public/list/{fileName}.txt with the provided content.
-public record SaveFileDto(
-    string FileName,
-    string Content);
+public record ListOptionCreateDto(
+    string Category,
+    string Value);
+
+public record ListOptionUpdateDto(
+    string Category,
+    string OldValue,
+    string NewValue);
+
+public record ListOptionDeleteDto(
+    string Category,
+    string Value);
 
 // dockets: everything needed to build the PDF and insert the list_docket row.
 // The image list holds file names already uploaded to the toolset image folder.

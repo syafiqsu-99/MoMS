@@ -32,3 +32,16 @@ public class ListDocket
     [Column("DATETIME")] public DateTime? DateTime { get; set; }
     [Column("YEAR_CREATED")] public int? YearCreated { get; set; }
 }
+
+[Table("list_option")]
+public class ListOption
+{
+    [Key]
+    [Column("id")] public int Id { get; set; }
+
+    [Column("category")] public string Category { get; set; } = string.Empty;
+
+    [Column("value")] public string Value { get; set; } = string.Empty;
+
+    [Column("sort_order")] public int SortOrder { get; set; }
+}

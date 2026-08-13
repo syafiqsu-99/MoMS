@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace MoMS.Server.Data;
 
@@ -14,6 +15,7 @@ public class MoMsDbContextFactory : IDesignTimeDbContextFactory<MoMsDbContext>
             .AddJsonFile(
                 $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json",
                 optional: true)
+            .AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true)
             .AddEnvironmentVariables()
             .Build();
 
@@ -25,7 +27,7 @@ public class MoMsDbContextFactory : IDesignTimeDbContextFactory<MoMsDbContext>
         {
             throw new InvalidOperationException(
                 "No connection string found. Set the ConnectionStrings__MoMsConnection " +
-                "or ConnectionStrings__DefaultConnection environment variable before running dotnet ef.");
+                "or ConnectionStrings__DefaultConnection environment variable (or user-secret) before running dotnet ef.");
         }
 
         var optionsBuilder = new DbContextOptionsBuilder<MoMsDbContext>();

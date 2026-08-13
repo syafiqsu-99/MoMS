@@ -22,7 +22,7 @@ builder.Services.AddScoped<TimelineService>();
 builder.Services.AddScoped<PreparationService>();
 builder.Services.AddScoped<ImageStorageService>();
 builder.Services.AddScoped<DocketService>();
-builder.Services.AddScoped<ListFileService>();
+builder.Services.AddScoped<ListOptionService>();
 
 builder.Services.AddHostedService<SchemaInitializerService>();
 
