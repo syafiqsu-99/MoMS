@@ -20,8 +20,8 @@
             <template v-slot:group-header="{ item, columns, toggleGroup, isGroupOpen }">
               <tr>
                 <td :colspan="columns.length">
-                  <v-btn :icon="isGroupOpen(item) ? 'mdi-chevron-down' : 'mdi-chevron-right'" size="small" variant="text"
-                    @click="toggleGroup(item)"></v-btn>
+                  <v-btn :icon="isGroupOpen(item) ? 'mdi-chevron-down' : 'mdi-chevron-right'" size="small"
+                    variant="text" @click="toggleGroup(item)"></v-btn>
                   {{ item.value }}
                 </td>
               </tr>
@@ -145,10 +145,12 @@
               <v-text-field v-model="form_Docket.picName" label="2. Vendor PIC Name" :rules="blankrules" required />
             </v-col>
             <v-col sm="6">
-              <v-text-field v-model="form_Docket.dateOut" label="3. Date OUT" type="date" :rules="blankrules" required />
+              <v-text-field v-model="form_Docket.dateOut" label="3. Date OUT" type="date" :rules="blankrules"
+                required />
             </v-col>
             <v-col sm="6">
-              <v-text-field v-model="form_Docket.timeOut" label="4. Time OUT" type="time" :rules="blankrules" required />
+              <v-text-field v-model="form_Docket.timeOut" label="4. Time OUT" type="time" :rules="blankrules"
+                required />
             </v-col>
             <v-col sm="6">
               <v-text-field v-model="form_Docket.dateIn" label="5. Target Date IN" type="date" :rules="blankrules"
@@ -159,10 +161,12 @@
                 :rules="blankrules" required />
             </v-col>
             <v-col sm="6">
-              <v-text-field v-model="form_Docket.modelDetails" label="7. Details (Model)" :rules="blankrules" required />
+              <v-text-field v-model="form_Docket.modelDetails" label="7. Details (Model)" :rules="blankrules"
+                required />
             </v-col>
             <v-col sm="6">
-              <v-text-field v-model="form_Docket.partsDetails" label="8. Details (Parts)" :rules="blankrules" required />
+              <v-text-field v-model="form_Docket.partsDetails" label="8. Details (Parts)" :rules="blankrules"
+                required />
             </v-col>
             <v-col sm="6">
               <v-text-field v-model="form_Docket.remarksDetails" label="9. Details (Remarks)" />
@@ -197,7 +201,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapState, mapActions } from "pinia";
+import { useMainStore } from "@/store/main";
 
 export default {
   data() {
@@ -282,7 +287,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["details", "scanDialog", "scanvalue", "prepared", "purpose", "production", "list_production", "vendor", "list_vendor", "mould_maker", "list_mould_maker"]),
+    ...mapState(useMainStore, ["details", "scanDialog", "scanvalue", "prepared", "purpose", "production", "list_production", "vendor", "list_vendor", "mould_maker", "list_mould_maker"]),
     // Unifies selected item
     selectedItem() {
       return this.selectedVendor || this.selectedMouldMaker;
@@ -303,7 +308,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["fetchAllData", "handleScanAction", "fetchListVendor", "fetchListMouldMaker"]),
+    ...mapActions(useMainStore, ["fetchAllData", "handleScanAction", "setScanDialog"]),
 
     async fetchHistory() {
       try {
@@ -369,7 +374,7 @@ export default {
 
     syncScanDialog(value) {
       this.localScanDialog = value;
-      this.$store.commit("SET_SCAN_DIALOG", value);
+      this.setScanDialog(value);
     },
 
     async saveData() {

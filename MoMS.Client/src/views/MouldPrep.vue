@@ -122,7 +122,7 @@
 
     <!-- ITEM LIST -->
     <v-row align="center" justify="center">
-      <v-col cols="12" md="4" v-for="section in  sections " :key="section.type">
+      <v-col cols="12" md="4" v-for="section in sections" :key="section.type">
         <v-card border="md">
           <div class="text-truncate font-weight-bold text-h5 mb-2 d-flex justify-center">
             {{ section.title }}
@@ -132,7 +132,7 @@
             items-per-page="-1" style="height: 400px; overflow-y: auto;">
             <template v-slot:default="{ items }">
               <v-row no-gutters dense>
-                <v-col cols="12" v-for="part in  items " :key="part.raw.S_NUM">
+                <v-col cols="12" v-for="part in items" :key="part.raw.S_NUM">
                   <v-card border="md" :color="part.raw.LOCATION === 'Mould Room' ? '#81C784' : '#E57373'" class="mb-2"
                     elevation="2" @click="toggleExpand(part)">
                     <v-card-title class="d-flex align-center">
@@ -168,7 +168,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "pinia";
+import { useMainStore } from "@/store/main";
 
 export default {
   data() {
@@ -207,7 +208,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["production", "scanDialog", "details", "scanvalue"]),
+    ...mapState(useMainStore, ["production", "scanDialog", "details", "scanvalue"]),
     canSubmit() {
       return this.selectedLocation && this.sections.some(section => section.table.length > 0);
     },
@@ -234,7 +235,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["handleScanAction"]),
+    ...mapActions(useMainStore, ["handleScanAction", "setScanDialog"]),
     addEventListener() {
       window.addEventListener("keypress", this.detectScannerInput);
     },
@@ -389,7 +390,7 @@ export default {
     },
     syncScanDialog(value) {
       this.localScanDialog = value;
-      this.$store.commit("SET_SCAN_DIALOG", value);
+      this.setScanDialog(value);
     },
     async confirmSubmit(proceed) {
       if (proceed) {

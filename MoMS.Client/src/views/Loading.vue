@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from "pinia";
+import { useMainStore } from "@/store/main";
 
 export default {
     data() {
@@ -23,33 +24,22 @@ export default {
         };
     },
     methods: {
-        ...mapActions([
+        ...mapActions(useMainStore, [
+            "fetchListOptions",
             "fetchAllData",
-            "fetchProduction",
-            "fetchVendor",
-            "fetchMouldMaker",
-            "fetchPrepared",
-            "fetchPurpose",
-            "fetchRack",
             "initializeHeaders",
             "initializeTimeline",
-            "initializeSceneManager",
         ]),
         async initializeData() {
             try {
-
+                // List options must load before full-list data, since
+                // fetchAllData buckets rows by production/vendor/mould_maker.
+                await this.fetchListOptions();
                 await Promise.all([
                     this.fetchAllData(),
-                    this.fetchProduction(),
-                    this.fetchVendor(),
-                    this.fetchMouldMaker(),
-                    this.fetchPrepared(),
-                    this.fetchPurpose(),
-                    this.fetchRack(),
                     this.initializeHeaders(),
-                    this.initializeTimeline(),
-                    this.initializeSceneManager()
                 ]);
+                this.initializeTimeline();
             } catch (error) {
                 console.error("Error initializing data:", error);
             } finally {
@@ -63,7 +53,7 @@ export default {
     },
 };
 </script>
-  
+
 <style scoped>
 .background_img {
     background: linear-gradient(rgba(0, 128, 128, 0.7),

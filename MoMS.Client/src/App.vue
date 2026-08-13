@@ -1,4 +1,4 @@
-<template >
+<template>
   <v-app>
     <router-view></router-view>
 
@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapState, mapActions } from "pinia";
+import { useMainStore } from "@/store/main";
 
 export default {
   data() {
@@ -36,7 +37,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["scanDialog"]),
+    ...mapState(useMainStore, ["scanDialog"]),
   },
   watch: {
     scanDialog(newValue) {
@@ -54,7 +55,7 @@ export default {
     this.removeEventListener();
   },
   methods: {
-    ...mapActions(["ScannedData", "handleScanAction"]),
+    ...mapActions(useMainStore, ["setScannedValue", "setScanDialog", "handleScanAction"]),
 
     addEventListener() {
       window.addEventListener("keypress", this.detectScannerInput);
@@ -77,14 +78,14 @@ export default {
       }, 50);
     },
     showActionDialog(scannedValue) {
-      this.$store.commit("SET_SCANNED_VALUE", scannedValue);
+      this.setScannedValue(scannedValue);
       this.actionDialog = true;
     },
     handleActionSelection(action) {
       this.actionDialog = false;
 
       const route = action === "change_mould" ? "mould_prep" : "scan";
-      this.$store.commit("SET_SCAN_DIALOG", true);
+      this.setScanDialog(true);
       this.$router.push({ name: route });
     },
   },
@@ -96,4 +97,3 @@ export default {
   table-layout: fixed;
 }
 </style>
-

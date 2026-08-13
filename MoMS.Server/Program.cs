@@ -5,10 +5,11 @@ using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("MomsConnection");
-var defaultConnectionConfigured = !string.IsNullOrWhiteSpace(connectionString);
+var connectionString = builder.Configuration.GetConnectionString("MoMsConnection")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionConfigured = !string.IsNullOrWhiteSpace(connectionString);
 
-if (!defaultConnectionConfigured)
+if (!connectionConfigured)
     connectionString = "Server=(unconfigured);Database=(unconfigured);Trusted_Connection=True;TrustServerCertificate=True";
 
 builder.Services.AddDbContext<MoMsDbContext>(options =>

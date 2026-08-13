@@ -27,7 +27,8 @@
                                     {{ item.PLAN_SERV }}
                                 </v-chip>
                             </template>
-                            <template v-for="header in additionalDateHeaders" v-slot:[`item.${header.value}`]="{ item }">
+                            <template v-for="header in additionalDateHeaders"
+                                v-slot:[`item.${header.value}`]="{ item }">
                                 <v-icon v-if="item[header.value]" color="primary">
                                     mdi-check
                                 </v-icon>
@@ -91,7 +92,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapState, mapActions } from "pinia";
+import { useMainStore } from "@/store/main";
 
 export default {
     data() {
@@ -102,7 +104,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["headers_timeline", "headers_progress", "additionalDateHeaders", "details"]),
+        ...mapState(useMainStore, ["headers_timeline", "headers_progress", "additionalDateHeaders", "details"]),
 
         // Filtered data for Injection Core and Injection Cavity
         filteredDetails() {
@@ -124,7 +126,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(["initializeHeaders", "initializeTimeline"]),
+        ...mapActions(useMainStore, ["initializeHeaders", "initializeTimeline"]),
 
         getusageColor(usage, plan_usage) {
             if (usage < plan_usage) return "green";

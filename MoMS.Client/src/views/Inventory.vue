@@ -97,7 +97,8 @@
                                 </td>
                                 <td align="center">
                                     <v-autocomplete v-model="editedItem.RACK_LEVEL" variant="outlined" min-width="70px"
-                                        menu-icon="" :items="rack" v-if="item.S_NUM === editedItem.S_NUM"></v-autocomplete>
+                                        menu-icon="" :items="rack"
+                                        v-if="item.S_NUM === editedItem.S_NUM"></v-autocomplete>
                                     <span v-else>{{ item.RACK }}{{ item.LEVEL }}</span>
                                 </td>
                                 <!-- <td align="center">
@@ -113,20 +114,22 @@
                                     <span v-else>{{ item.LOCATION }}</span>
                                 </td>
                                 <td align="center" :bgcolor="getStatusColor(item.STATUS)">
-                                    <v-select v-model="editedItem.STATUS" variant="outlined" min-width="150px" menu-icon=""
-                                        :items="['GOOD', 'NOT GOOD']" v-if="item.S_NUM === editedItem.S_NUM"></v-select>
+                                    <v-select v-model="editedItem.STATUS" variant="outlined" min-width="150px"
+                                        menu-icon="" :items="['GOOD', 'NOT GOOD']"
+                                        v-if="item.S_NUM === editedItem.S_NUM"></v-select>
                                     <span v-else>{{ item.STATUS }}</span>
                                 </td>
                                 <td><v-text-field v-model="editedItem.REMARK" variant="outlined" min-width="200px"
                                         v-if="item.S_NUM === editedItem.S_NUM"></v-text-field>
                                     <span v-else>{{ item.REMARK }}</span>
                                 </td>
-                                <td align="center"><v-text-field v-model="editedItem.USAGE" variant="outlined" type="number"
-                                        min="0" v-if="item.S_NUM === editedItem.S_NUM"></v-text-field>
+                                <td align="center"><v-text-field v-model="editedItem.USAGE" variant="outlined"
+                                        type="number" min="0" v-if="item.S_NUM === editedItem.S_NUM"></v-text-field>
                                     <span v-else>{{ item.USAGE }}</span>
                                 </td>
                                 <td align="center"><v-text-field v-model="editedItem.LAST_SERV" variant="outlined"
-                                        type="date" min-width="170px" v-if="item.S_NUM === editedItem.S_NUM"></v-text-field>
+                                        type="date" min-width="170px"
+                                        v-if="item.S_NUM === editedItem.S_NUM"></v-text-field>
                                     <span v-else>{{ item.LAST_SERV }}</span>
                                 </td>
                                 <td align="center">
@@ -136,7 +139,8 @@
                                         <v-icon color="green" @click="saveItem()">mdi-content-save</v-icon>
                                     </template>
                                     <template v-else>
-                                        <v-icon color="green" class="mr-3" @click.stop="editItem(item)">mdi-pencil</v-icon>
+                                        <v-icon color="green" class="mr-3"
+                                            @click.stop="editItem(item)">mdi-pencil</v-icon>
                                         <v-icon color="red" class="mr-3"
                                             @click.stop="promptDelete(item)">mdi-delete</v-icon>
                                     </template>
@@ -167,7 +171,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapState, mapActions } from "pinia";
+import { useMainStore } from "@/store/main";
 
 export default {
     data() {
@@ -195,10 +200,10 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["details", "rack", "production", "vendor", "mould_maker"]),
+        ...mapState(useMainStore, ["details", "rack", "production", "vendor", "mould_maker"]),
     },
     methods: {
-        ...mapActions(["fetchAllData"]),
+        ...mapActions(useMainStore, ["fetchAllData"]),
         handleClick(label) {
             this.selectRack = label;
             this.inventory = this.details.filter((item) => item.RACK === label);

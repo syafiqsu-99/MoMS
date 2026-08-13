@@ -8,31 +8,11 @@ const routes = [
     component: NavBar,
     children: [
       { path: "dashboard", name: "dashboard", component: () => import("../views/Dashboard.vue") },
-      {
-        path: "mould_prep",
-        name: "mould_prep",
-        component: () => import("../views/MouldPrep.vue"),
-      },
-      {
-        path: "scan",
-        name: "scan",
-        component: () => import("../views/Scan.vue"),
-      },
-      {
-        path: "maintenance",
-        name: "maintenance",
-        component: () => import("../views/Maintenance.vue"),
-      },
-      {
-        path: "inventory",
-        name: "inventory",
-        component: () => import("../views/Inventory.vue"),
-      },
-      {
-        path: "setting",
-        name: "setting",
-        component: () => import("../views/Setting.vue"),
-      },
+      { path: "mould_prep", name: "mould_prep", component: () => import("../views/MouldPrep.vue") },
+      { path: "scan", name: "scan", component: () => import("../views/Scan.vue") },
+      { path: "maintenance", name: "maintenance", component: () => import("../views/Maintenance.vue") },
+      { path: "inventory", name: "inventory", component: () => import("../views/Inventory.vue") },
+      { path: "setting", name: "setting", component: () => import("../views/Setting.vue") },
     ],
   },
 ];
@@ -42,12 +22,17 @@ const router = createRouter({
   routes,
 });
 
+let booted = false;
+
 router.beforeEach((to, from, next) => {
-  if (to.name !== "loading" && from.name == null) {
-    next({ name: "loading" });
-  } else {
-    next();
+  if (!booted) {
+    booted = true;
+    if (to.name !== "loading") {
+      next({ name: "loading" });
+      return;
+    }
   }
+  next();
 });
 
 export default router;
