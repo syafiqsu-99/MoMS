@@ -18,5 +18,7 @@ public class MoMsDbContext(DbContextOptions<MoMsDbContext> options) : DbContext(
         modelBuilder.Entity<FullList>()
             .Property(f => f.Usage)
             .HasColumnName("USAGE");
+
+        modelBuilder.Entity<Preparation>().HasNoKey();
     }
 }

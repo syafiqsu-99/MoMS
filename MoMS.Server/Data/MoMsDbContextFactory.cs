@@ -4,10 +4,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace MoMS.Server.Data;
 
-// Used only by the `dotnet ef` CLI at design time. It reads the same
-// configuration sources as the app (env vars using the double-underscore
-// convention, then appsettings*.json) so migration commands work in VS Code
-// without launching the full host.
 public class MoMsDbContextFactory : IDesignTimeDbContextFactory<MoMsDbContext>
 {
     public MoMsDbContext CreateDbContext(string[] args)

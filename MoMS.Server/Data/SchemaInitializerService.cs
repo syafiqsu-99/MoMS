@@ -2,9 +2,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MoMS.Server.Data;
 
-// Runs once at startup to bring the schema up to date. By design this only
-// applies additive migrations (new tables / columns). Column or table drops
-// are performed manually and must never be introduced here.
 public class SchemaInitializerService(
     IServiceScopeFactory scopeFactory,
     ILogger<SchemaInitializerService> logger) : IHostedService
