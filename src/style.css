@@ -1,0 +1,14 @@
+/* For Webkit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust scrollbar width */
+  height: 8px; /* Adjust scrollbar height for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent scrollbar thumb */
+  border-radius: 4px; /* Rounded scrollbar thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Transparent scrollbar track */
+}
